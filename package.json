@@ -1,0 +1,26 @@
+{
+  "name": "zhihu-api",
+  "version": "1.0.0",
+  "description": "使用nodejs开发仿知乎服务端",
+  "main": "index.js",
+  "scripts": {
+    "init": "node index.js",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoseGithub/zhihu-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yoseGithub/zhihu-api/issues"
+  },
+  "homepage": "https://github.com/yoseGithub/zhihu-api#readme",
+  "dependencies": {
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0",
+    "nodemon": "^1.19.1"
+  }
+}
