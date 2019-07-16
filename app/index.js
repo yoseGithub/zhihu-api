@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const bodyparser = require('koa-bodyparser');
+const error = require('koa-json-error');
 const app = new Koa(); // 实例化koa
 const routes = require('./routes');
 
@@ -7,13 +8,6 @@ const routes = require('./routes');
 app.use(async (ctx, next) => {
     try {
         await next();
-
-        // 捕获不到异常，但状态码为404
-        if (ctx.status === 404) {
-            ctx.body = {
-                message: '页面找不到'
-            }
-        }
     } catch (err) {
         // 如果没捕获到状态码，证明是服务器内部错误
         ctx.status = err.status || err.statusCode || 500;
@@ -23,7 +17,17 @@ app.use(async (ctx, next) => {
     }
 });
 
-// 启动路由
+app.use(error({
+    // 后置的修改返回格式
+    postFormat: (err, {stack, ...rest}) => process.env.NODE_ENV === 'production' ? rest : {stack, ...rest}
+    // postFormat: function (err, obj) {
+    //     if (process.env.NODE_ENV === 'production') {
+    //         delete obj.stack
+    //         return obj;
+    //     }
+    //     return obj;
+    // }
+}));
 app.use(bodyparser());
 routes(app);
 
