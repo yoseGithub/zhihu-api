@@ -3,10 +3,19 @@ const db = [{name: '李雷'}];
 
 class UsersCtl {
     find (ctx) {
+        a.b;
         ctx.body = db;
     }
 
-    findId (ctx) {
+    findById (ctx) {
+        if (+ctx.params.id >= db.length) {
+            // ctx.body = '先决条件失败：id 大于数组条件长度';
+            // ctx.status = 412;
+            // return;
+
+            ctx.throw(412, '先决条件失败：id 大于数组条件长度'); // 等价于上面三句话
+        }
+
         ctx.body = db[+ctx.params.id];
     }
 
