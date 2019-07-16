@@ -3,6 +3,26 @@ const bodyparser = require('koa-bodyparser');
 const app = new Koa(); // 实例化koa
 const routes = require('./routes');
 
+// 错误处理中间件
+app.use(async (ctx, next) => {
+    try {
+        await next();
+
+        // 捕获不到异常，但状态码为404
+        if (ctx.status === 404) {
+            ctx.body = {
+                message: '页面找不到'
+            }
+        }
+    } catch (err) {
+        // 如果没捕获到状态码，证明是服务器内部错误
+        ctx.status = err.status || err.statusCode || 500;
+        ctx.body = {
+            message: err.message
+        }
+    }
+});
+
 // 启动路由
 app.use(bodyparser());
 routes(app);
