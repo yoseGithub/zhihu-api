@@ -1,6 +1,7 @@
 const Koa = require('koa');
 const bodyparser = require('koa-bodyparser');
 const error = require('koa-json-error');
+const parameter = require('koa-parameter');
 const app = new Koa(); // 实例化koa
 const routes = require('./routes');
 
@@ -29,6 +30,7 @@ app.use(error({
     // }
 }));
 app.use(bodyparser());
+app.use(parameter(app));
 routes(app);
 
 app.listen(3000, () => {
