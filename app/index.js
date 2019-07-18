@@ -2,8 +2,16 @@ const Koa = require('koa');
 const bodyparser = require('koa-bodyparser');
 const error = require('koa-json-error');
 const parameter = require('koa-parameter');
+const mongoose = require('mongoose');
 const app = new Koa(); // 实例化koa
 const routes = require('./routes');
+const { connectionStr, connectionLocal } = require('./config.js');
+
+// 连接 mongoDB
+// mongoose.connect(connectionStr, { useNewUrlParser: true } , () => console.log('MongoDB 连接成功'));
+mongoose.connect(connectionLocal, { useNewUrlParser: true } , () => console.log('MongoDB 连接成功'));
+// 打印错误信息
+mongoose.connection.on('error', console.error);
 
 // 错误处理中间件
 app.use(async (ctx, next) => {

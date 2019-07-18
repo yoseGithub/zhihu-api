@@ -1,34 +1,24 @@
-// 内存数据库
-const db = [{name: '李雷'}];
+const User = require('../models/users');
 
 class UsersCtl {
-    find (ctx) {
-        a.b;
-        ctx.body = db;
+    async find (ctx) {
+        ctx.body = await User.find();
     }
 
-    findById (ctx) {
-        if (+ctx.params.id >= db.length) {
-            ctx.throw(412, '先决条件失败：id 大于数组条件长度'); // 等价于上面三句话
-        }
-
-        ctx.body = db[+ctx.params.id];
+    async findById (ctx) {
+        const user = await User.findById(ctx.params.id);
+        if(!user) ctx.throw(404, '用户不存在');
+        ctx.body = user;
     }
 
-    create (ctx) {
+    async create (ctx) {
         ctx.verifyParams({
-            name: {
-                type: 'string',
-                required: true
-            },
-            age: {
-                type: 'number',
-                required: false
-            }
+            name: { type: 'string', required: true },
+            age: { type: 'number', required: false }
         });
-
-        db.push(ctx.request.body);
-        ctx.body = ctx.request.body;
+        
+        const user = await new User(ctx.request.body).save();
+        ctx.body = user;
     }
 
     update (ctx) {
