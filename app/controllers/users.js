@@ -13,40 +13,31 @@ class UsersCtl {
 
     async create (ctx) {
         ctx.verifyParams({
-            name: { type: 'string', required: true },
-            age: { type: 'number', required: false }
+            name: { type: 'string', required: true }
         });
         
+        // save方法，保存到数据库。并根据 RESTful API最佳实践，返回增加的内容
         const user = await new User(ctx.request.body).save();
         ctx.body = user;
     }
 
-    update (ctx) {
-        if (+ctx.params.id >= db.length) {
-            ctx.throw(412, '先决条件失败：id 大于数组条件长度'); // 等价于上面三句话
-        }
-
+    async update (ctx) {
         ctx.verifyParams({
             name: {
                 type: 'string',
                 required: true
-            },
-            age: {
-                type: 'number',
-                required: false
             }
         });
 
-        db[+ctx.params.id] = ctx.request.body;
-        ctx.body = ctx.request.body;
+        // findByIdAndUpdate，第一个参数为要修改的数据id，第二个参数为修改的内容
+        const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body);
+        if(!user) ctx.throw(404, '用户不存在');
+        ctx.body = user;
     }
 
-    delete (ctx) {
-        if (+ctx.params.id >= db.length) {
-            ctx.throw(412, '先决条件失败：id 大于数组条件长度'); // 等价于上面三句话
-        }
-
-        db.splice(+ctx.params.id, 1);
+    async delete (ctx) {
+        const user = await User.findByIdAndRemove(ctx.params.id);
+        if(!user) ctx.throw(404, '用户不存在');
         ctx.status = 204; // 没有内容，但是成功了
     }
 }
