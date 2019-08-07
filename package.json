@@ -21,6 +21,7 @@
   "homepage": "https://github.com/yoseGithub/zhihu-api#readme",
   "dependencies": {
     "cross-env": "^5.2.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-json-error": "^3.1.2",

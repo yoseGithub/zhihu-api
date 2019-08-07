@@ -2,7 +2,7 @@ const User = require('../models/users');
 
 class UsersCtl {
     async find (ctx) {
-        ctx.body = await User.find();
+        ctx.body = await User.find().select("-password");
     }
 
     async findById (ctx) {
@@ -13,9 +13,16 @@ class UsersCtl {
 
     async create (ctx) {
         ctx.verifyParams({
-            name: { type: 'string', required: true }
+            name: { type: 'string', required: true },
+            password: { type: 'string', required: true }
         });
-        
+
+        // 查重
+        const { name } = ctx.request.body;
+        const requesteUser = await user.findOne({ name });
+
+        if(requesteUser) ctx.throw(409, '用户已经存在');
+
         // save方法，保存到数据库。并根据 RESTful API最佳实践，返回增加的内容
         const user = await new User(ctx.request.body).save();
         ctx.body = user;
@@ -23,10 +30,8 @@ class UsersCtl {
 
     async update (ctx) {
         ctx.verifyParams({
-            name: {
-                type: 'string',
-                required: true
-            }
+            name: { type: 'string', required: false },
+            password: { type: 'string', required: false }
         });
 
         // findByIdAndUpdate，第一个参数为要修改的数据id，第二个参数为修改的内容
