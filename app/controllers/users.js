@@ -1,8 +1,10 @@
-const User = require('../models/users');
+const jsonwebtoken = require('jsonwebtoken');
+const User = require('../models/users'); // 数据库模型导出
+const { secret } = require('../config');
 
 class UsersCtl {
     async find (ctx) {
-        ctx.body = await User.find().select("-password");
+        ctx.body = await User.find();
     }
 
     async findById (ctx) {
@@ -19,7 +21,7 @@ class UsersCtl {
 
         // 查重
         const { name } = ctx.request.body;
-        const requesteUser = await user.findOne({ name });
+        const requesteUser = await User.findOne({ name });
 
         if(requesteUser) ctx.throw(409, '用户已经存在');
 
@@ -44,6 +46,20 @@ class UsersCtl {
         const user = await User.findByIdAndRemove(ctx.params.id);
         if(!user) ctx.throw(404, '用户不存在');
         ctx.status = 204; // 没有内容，但是成功了
+    }
+
+    async login (ctx) {
+        ctx.verifyParams({
+            name: { type: 'string', required: true },
+            password: { type: 'string', required: true }
+        });
+
+        const user = await User.findOne(ctx.request.body);
+        if(!user) ctx.throw(401, '用户名或密码不正确');
+
+        const { _id, name } = user;
+        const token = jsonwebtoken.sign({ _id, name }, secret, { expiresIn: '1d' });
+        ctx.body = { token };
     }
 }
 
