@@ -12,7 +12,7 @@ const auth = async (ctx, next) => {
 
     try {
         const user = jsonwebtoken.verify(token, secret);
-        ctx.state.user = user;
+        ctx.state.user = user; // 约定俗成
     } catch (err) {
         ctx.throw(401, err.message);
     }
