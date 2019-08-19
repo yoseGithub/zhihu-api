@@ -1,8 +1,9 @@
 const Koa = require('koa');
-const bodyparser = require('koa-bodyparser');
+const koaBody = require('koa-body');
 const error = require('koa-json-error');
 const parameter = require('koa-parameter');
 const mongoose = require('mongoose');
+const path = require('path');
 const app = new Koa(); // 实例化koa
 const routes = require('./routes');
 const { connectionStr, connectionLocal } = require('./config.js');
@@ -37,7 +38,17 @@ app.use(error({
     //     return obj;
     // }
 }));
-app.use(bodyparser());
+
+app.use(
+    koaBody({
+        multipart: true, // 启用文件
+        formidable: {
+            uploadDir: path.join(__dirname, '../public/uploads'), // 上传路径
+            keepExtensions: true // 保留拓展名
+        }
+    })
+);
+
 app.use(parameter(app));
 routes(app);
 
