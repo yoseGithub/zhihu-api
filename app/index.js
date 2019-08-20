@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const koaBody = require('koa-body');
+const koaStatic = require('koa-static');
 const error = require('koa-json-error');
 const parameter = require('koa-parameter');
 const mongoose = require('mongoose');
@@ -13,6 +14,9 @@ const { connectionStr, connectionLocal } = require('./config.js');
 mongoose.connect(connectionLocal, { useNewUrlParser: true } , () => console.log('MongoDB 连接成功'));
 // 打印错误信息
 mongoose.connection.on('error', console.error);
+
+// 使用koa-static，设置当前目录下的 public文件夹为上传图片的存储文件夹
+app.use(koaStatic(path.join(__dirname, 'public')));
 
 // 错误处理中间件
 app.use(async (ctx, next) => {
@@ -43,7 +47,7 @@ app.use(
     koaBody({
         multipart: true, // 启用文件
         formidable: {
-            uploadDir: path.join(__dirname, '../public/uploads'), // 上传路径
+            uploadDir: path.join(__dirname, 'public/uploads'), // 上传路径
             keepExtensions: true // 保留拓展名
         }
     })
