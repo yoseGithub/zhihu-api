@@ -15,7 +15,7 @@ mongoose.connect(connectionLocal, { useNewUrlParser: true } , () => console.log(
 // 打印错误信息
 mongoose.connection.on('error', console.error);
 
-// 使用koa-static，设置当前目录下的 public文件夹为上传图片的存储文件夹
+// 使用koa-static，设置当前目录下的 public文件夹为上传图片的存储文件夹，也是对外可访问的文件夹
 app.use(koaStatic(path.join(__dirname, 'public')));
 
 // 错误处理中间件
