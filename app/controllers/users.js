@@ -33,7 +33,14 @@ class UsersCtl {
     async update (ctx) {
         ctx.verifyParams({
             name: { type: 'string', required: false },
-            password: { type: 'string', required: false }
+            password: { type: 'string', required: false },
+            avatar_url: { type: 'string', require: false },
+            gender: { type: 'string', require: false },
+            headline: { type: 'string', require: false },
+            locations: { type: 'array',itemType: 'string', require: false },
+            business: { type: 'string', require: false },
+            employments: { type: 'array',itemType: 'object', require: false },
+            educations: { type: 'array',itemType: 'object', require: false }
         });
 
         // findByIdAndUpdate，第一个参数为要修改的数据id，第二个参数为修改的内容

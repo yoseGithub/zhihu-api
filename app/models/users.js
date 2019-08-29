@@ -21,7 +21,7 @@ const userSchema = new Schema({
         type: [{
             school: { type: String },
             major: { type: String },
-            diploma: { type: Number, enum: [1, 2, 3, 4, 5] },
+            diploma: { type: Number, enum: [1, 2, 3, 4, 5] }, // 文凭：初中，高中，大专，本科，本科以上
             entrance_year: { type: Number },
             graduation_year: { type: Number }
         }]
