@@ -27,6 +27,13 @@ const userSchema = new Schema({
             graduation_year: { type: Number }
         }],
         select: false
+    },
+    following: { // 关注他人
+        type: [{
+            type: Schema.Types.ObjectId, // 用户ID
+            ref: 'User' // 引用
+        }],
+        select: false
     }
 });
 
