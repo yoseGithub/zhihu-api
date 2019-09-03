@@ -28,14 +28,14 @@ const userSchema = new Schema({
         }],
         select: false
     },
-    following: { // 关注他人
+    following: { // 关注者
         type: [{
             type: Schema.Types.ObjectId, // 用户ID
-            ref: 'User' // 引用
+            ref: 'User' // 引用 User = require('../models/users') 数据库模型
         }],
         select: false
     }
 });
 
 // user代表集合，导出的是一个类
-module.exports = model('user', userSchema);
+module.exports = model('User', userSchema);

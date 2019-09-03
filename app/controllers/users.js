@@ -76,6 +76,39 @@ class UsersCtl {
 
         await next();
     }
+
+    async listFollowing (ctx) {
+        const user = await User.findById(ctx.params.id).select('+following').populate('following');
+        if(!user) ctx.throw(404);
+        ctx.body = user.following;
+    }
+
+    async listFollowers (ctx) {
+        const users = await User.find({ following: ctx.params.id }); // 查找following包含自己id的用户
+        ctx.body = users;
+    }
+
+    async follow (ctx) {
+        const me = await User.findById(ctx.state.user._id).select('+following');
+        // me 会拿到当前用户信息，拿到后再去查询一下是否关注的对象是否已经在关注数组里，如果没有就添加进关注数组里并保存
+        // 否则关注者的数组里会存在多个已关注对象
+        // 由于following数组里保存的是 schema 对象，所以需要使用将其变换成字符串来查重
+        if(!me.following.map(id => id.toString()).includes(ctx.params.id)) {
+            me.following.push(ctx.params.id);
+            me.save();
+        }
+        ctx.status = 204;
+    }
+
+    async unfollow (ctx) {
+        const me = await User.findById(ctx.state.user._id).select('+following');
+        const index = me.following.map(id => id.toString()).indexOf(ctx.params.id);
+        if(index > -1) {
+            me.following.splice(index, 1);
+            me.save();
+        }
+        ctx.status = 204;
+    }
 }
 
 module.exports = new UsersCtl();
