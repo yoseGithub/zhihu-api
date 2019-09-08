@@ -2,9 +2,12 @@ const jsonwebtoken = require('jsonwebtoken');
 const User = require('../models/users'); // 数据库模型导出
 const { secret } = require('../config');
 
-class UsersCtl {
+class UsersCtl {    
     async find (ctx) {
-        ctx.body = await User.find();
+        const { per_page = 10 } = ctx.query;
+        const page =  Math.max(+ctx.query.page, 1) - 1;
+        const perPage = Math.max(+ctx.query.per_page, 1);
+        ctx.body = await User.find().limit(perPage).skip(page * perPage); // limit: 返回多少数量，skip：跳过多少数量
     }
 
     async findById (ctx) {
