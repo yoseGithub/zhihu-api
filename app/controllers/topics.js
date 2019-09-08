@@ -2,10 +2,14 @@ const Topic = require('../models/topics'); // 数据库模型导出
 
 class TopicsCtl {
     async find (ctx) {
+<<<<<<< HEAD
         const { per_page = 10 } = ctx.query;
         const page =  Math.max(+ctx.query.page, 1) - 1;
         const perPage = Math.max(+ctx.query.per_page, 1);
         ctx.body = await Topic.find({ name: new RegExp(ctx.query.q) }).limit(perPage).skip(page * perPage); // limit: 返回多少数量，skip：跳过多少数量
+=======
+        ctx.body = await Topic.find();
+>>>>>>> section-11.3
     }
 
     async findById (ctx) {
