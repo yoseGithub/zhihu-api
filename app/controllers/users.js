@@ -7,7 +7,7 @@ class UsersCtl {
         const { per_page = 10 } = ctx.query;
         const page =  Math.max(+ctx.query.page, 1) - 1;
         const perPage = Math.max(+ctx.query.per_page, 1);
-        ctx.body = await User.find().limit(perPage).skip(page * perPage); // limit: 返回多少数量，skip：跳过多少数量
+        ctx.body = await User.find({ name: new RegExp(ctx.query.q) }).limit(perPage).skip(page * perPage); // limit: 返回多少数量，skip：跳过多少数量
     }
 
     async findById (ctx) {
