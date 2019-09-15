@@ -12,7 +12,7 @@ class QuestionsCtl {
     async findById (ctx) {
         const { fields = '' } = ctx.query;
         const selectFields = fields.split(';').filter(item => item).map(item => ' +'+item).join('');
-        const question = await Question.findById(ctx.params.id).select(selectFields).populate('questioner');
+        const question = await Question.findById(ctx.params.id).select(selectFields).populate('questioner topics');
         if(!question) ctx.throw(404, '问题不存在');
         ctx.body = question;
     }

@@ -1,7 +1,7 @@
 const jwt = require('koa-jwt');
 const Router = require('koa-router');
 const router = new Router({prefix: '/topics'});
-const { find, findById, create, update, checkTopicExist, listTopicsFollowers } = require('../controllers/topics');
+const { find, findById, create, update, checkTopicExist, listTopicsFollowers, listQuestions } = require('../controllers/topics');
 
 const { secret } = require('../config');
 
@@ -21,6 +21,9 @@ router.get('/:id',checkTopicExist, findById);
 router.patch('/:id', auth, checkTopicExist, update);
 
 // 获取当前话题下的关注者
-router.get('/:id/followers', checkTopicExist, listTopicsFollowers)
+router.get('/:id/followers', checkTopicExist, listTopicsFollowers);
+
+// 获取当前话题下的问题
+router.get('/:id/questions', checkTopicExist, listQuestions)
 
 module.exports = router;
