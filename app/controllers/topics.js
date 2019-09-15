@@ -1,4 +1,5 @@
 const Topic = require('../models/topics'); // 数据库模型导出
+const User = require('../models/users'); // 数据库模型导出
 
 class TopicsCtl {
     async find (ctx) {
@@ -47,6 +48,19 @@ class TopicsCtl {
         const topic = await Topic.findByIdAndUpdate(ctx.params.id, ctx.request.body);
         if(!topic) ctx.throw(404, '话题不存在');
         ctx.body = topic;
+    }
+
+    // 话题关注者
+    async listTopicsFollowers (ctx) {
+        const users = await User.find({ followingTopics: ctx.params.id }); // 查找followingTopics包含该话题id的用户
+        ctx.body = users;
+    }
+
+    async checkTopicExist (ctx, next) {
+        const topic = await Topic.findById(ctx.params.id);
+        if(!topic) ctx.throw(404, '话题不存在');
+
+        await next();
     }
 }
 

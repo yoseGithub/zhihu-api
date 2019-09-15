@@ -34,6 +34,13 @@ const userSchema = new Schema({
             ref: 'User' // 引用 User = require('../models/users') 数据库模型
         }],
         select: false
+    },
+    followingTopics: { // 关注的话题
+        type: [{
+            type: Schema.Types.ObjectId, // 话题ID
+            ref: 'Topic' // 引用 Topic = require('../models/topics') 数据库模型
+        }],
+        select: false
     }
 });
 

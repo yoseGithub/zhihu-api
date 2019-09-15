@@ -2,9 +2,10 @@ const jwt = require('koa-jwt');
 const Router = require('koa-router');
 const router = new Router({prefix: '/users'});
 const { find, findById, create, update, delete: del, login,
-    checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist } = require('../controllers/users');
+    checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist, followTopic, unfollowTopic, listFollowingTopics, listQuestions } = require('../controllers/users');
+const { checkTopicExist } = require('../controllers/topics');
 
-const { secret} = require('../config');
+const { secret } = require('../config');
 
 // 认证中间件
 const auth = jwt({ secret });
@@ -31,12 +32,25 @@ router.post('/login', login);
 router.get('/:id/following', listFollowing);
 
 // 获取粉丝
-router.get('/:id/followers', listFollowers)
+router.get('/:id/followers', checkUserExist, listFollowers)
 
 // 关注某人
 router.put('/following/:id', auth, checkUserExist, follow);
 
 // 取消关注某人
 router.put('/unfollowing/:id', auth, checkUserExist, unfollow);
+
+// 获取关注话题列表
+router.get('/:id/listFollowingTopics', listFollowingTopics);
+
+// 关注某话题
+router.put('/followingTopic/:id', auth, checkTopicExist, followTopic);
+
+// 取消关注某话题
+router.put('/unfollowingTopic/:id', auth, checkTopicExist, unfollowTopic);
+
+// 获取问题列表
+router.get('/:id/questions', checkUserExist, listQuestions)
+
 
 module.exports = router;
