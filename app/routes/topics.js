@@ -15,10 +15,10 @@ router.get('/', find);
 router.post('/', auth, create);
 
 // 获取特定话题
-router.get('/:id', findById);
+router.get('/:id',checkTopicExist, findById);
 
 // 修改特定话题
-router.patch('/:id', auth, update);
+router.patch('/:id', auth, checkTopicExist, update);
 
 // 获取当前话题下的关注者
 router.get('/:id/followers', checkTopicExist, listTopicsFollowers)

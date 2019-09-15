@@ -2,7 +2,7 @@ const jwt = require('koa-jwt');
 const Router = require('koa-router');
 const router = new Router({prefix: '/users'});
 const { find, findById, create, update, delete: del, login,
-    checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist, followTopic, unfollowTopic, listFollowingTopics } = require('../controllers/users');
+    checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist, followTopic, unfollowTopic, listFollowingTopics, listQuestions } = require('../controllers/users');
 const { checkTopicExist } = require('../controllers/topics');
 
 const { secret } = require('../config');
@@ -48,5 +48,9 @@ router.put('/followingTopic/:id', auth, checkTopicExist, followTopic);
 
 // 取消关注某话题
 router.put('/unfollowingTopic/:id', auth, checkTopicExist, unfollowTopic);
+
+// 获取问题列表
+router.get('/:id/questions', checkUserExist, listQuestions)
+
 
 module.exports = router;
