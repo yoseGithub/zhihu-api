@@ -41,6 +41,20 @@ const userSchema = new Schema({
             ref: 'Topic' // 引用 Topic = require('../models/topics') 数据库模型
         }],
         select: false
+    },
+    likingAnswers: {
+        type: [{
+            type: Schema.Types.ObjectId, // 答案ID
+            ref: 'Answer'
+        }],
+        select: false
+    },
+    dislikingAnswers: {
+        type: [{
+            type: Schema.Types.ObjectId, // 答案ID
+            ref: 'Answer'
+        }],
+        select: false
     }
 });
 

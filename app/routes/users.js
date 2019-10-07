@@ -2,8 +2,13 @@ const jwt = require('koa-jwt');
 const Router = require('koa-router');
 const router = new Router({prefix: '/users'});
 const { find, findById, create, update, delete: del, login,
-    checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist, followTopic, unfollowTopic, listFollowingTopics, listQuestions } = require('../controllers/users');
+    checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist,
+    followTopic, unfollowTopic, listFollowingTopics, listQuestions,
+    listLikingAnswers, likeAnswer, unlikeAnswer,
+    listDisLikingAnswers, dislikeAnswer, undislikeAnswer } = require('../controllers/users');
+
 const { checkTopicExist } = require('../controllers/topics');
+const { checkAnswerExist } = require('../controllers/answers');
 
 const { secret } = require('../config');
 
@@ -38,7 +43,7 @@ router.get('/:id/followers', checkUserExist, listFollowers)
 router.put('/following/:id', auth, checkUserExist, follow);
 
 // 取消关注某人
-router.put('/unfollowing/:id', auth, checkUserExist, unfollow);
+router.delete('/following/:id', auth, checkUserExist, unfollow);
 
 // 获取关注话题列表
 router.get('/:id/listFollowingTopics', listFollowingTopics);
@@ -47,10 +52,28 @@ router.get('/:id/listFollowingTopics', listFollowingTopics);
 router.put('/followingTopic/:id', auth, checkTopicExist, followTopic);
 
 // 取消关注某话题
-router.put('/unfollowingTopic/:id', auth, checkTopicExist, unfollowTopic);
+router.delete('/followingTopic/:id', auth, checkTopicExist, unfollowTopic);
 
 // 获取问题列表
 router.get('/:id/questions', checkUserExist, listQuestions)
+
+// 获取喜欢的答案列表
+router.get('/:id/likingAnswers', listLikingAnswers);
+
+// 点赞答案
+router.put('/likingAnswers/:id', auth, checkAnswerExist, likeAnswer, undislikeAnswer);
+
+// 取消点赞答案
+router.delete('/likingAnswers/:id', auth, checkAnswerExist, unlikeAnswer);
+
+// 获取踩的答案列表
+router.get('/:id/dislikingAnswers', listDisLikingAnswers);
+
+// 踩答案
+router.put('/dislikingAnswers/:id', auth, checkAnswerExist, dislikeAnswer, unlikeAnswer);
+
+// 取消踩答案
+router.delete('/dislikingAnswers/:id', auth, checkAnswerExist, undislikeAnswer);
 
 
 module.exports = router;
