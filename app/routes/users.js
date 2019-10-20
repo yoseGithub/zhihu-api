@@ -5,7 +5,8 @@ const { find, findById, create, update, delete: del, login,
     checkOwner, listFollowing, follow, unfollow, listFollowers, checkUserExist,
     followTopic, unfollowTopic, listFollowingTopics, listQuestions,
     listLikingAnswers, likeAnswer, unlikeAnswer,
-    listDisLikingAnswers, dislikeAnswer, undislikeAnswer } = require('../controllers/users');
+    listDisLikingAnswers, dislikeAnswer, undislikeAnswer,
+    listCollectAnswers, collectAnswer, uncollectAnswer } = require('../controllers/users');
 
 const { checkTopicExist } = require('../controllers/topics');
 const { checkAnswerExist } = require('../controllers/answers');
@@ -75,5 +76,13 @@ router.put('/dislikingAnswers/:id', auth, checkAnswerExist, dislikeAnswer, unlik
 // 取消踩答案
 router.delete('/dislikingAnswers/:id', auth, checkAnswerExist, undislikeAnswer);
 
+// 获取收藏答案列表
+router.get('/:id/collectAnswers', listCollectAnswers);
+
+// 收藏答案
+router.put('/collectAnswers/:id', auth, checkAnswerExist, collectAnswer);
+
+// 取消收藏答案
+router.delete('/collectAnswers/:id', auth, checkAnswerExist, uncollectAnswer);
 
 module.exports = router;

@@ -42,14 +42,21 @@ const userSchema = new Schema({
         }],
         select: false
     },
-    likingAnswers: {
+    likingAnswers: {  // 点赞的答案
         type: [{
             type: Schema.Types.ObjectId, // 答案ID
             ref: 'Answer'
         }],
         select: false
     },
-    dislikingAnswers: {
+    dislikingAnswers: { // 踩的答案
+        type: [{
+            type: Schema.Types.ObjectId, // 答案ID
+            ref: 'Answer'
+        }],
+        select: false
+    },
+    collectingAnswers: {  // 收藏答案
         type: [{
             type: Schema.Types.ObjectId, // 答案ID
             ref: 'Answer'
